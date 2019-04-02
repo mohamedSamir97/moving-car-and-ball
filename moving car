@@ -1,0 +1,208 @@
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
+
+
+def myInit():
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(60,1,1,90)
+    gluLookAt(8,9,10,
+              0,0,0,
+              0,1,0)
+
+    glClearColor(1,1,1,1)
+    glClear(GL_COLOR_BUFFER_BIT)
+
+
+def drawXYZ():
+    glBegin(GL_LINES)
+    glColor3f(0.8,.5,0)
+    glVertex(0,0,0)
+    glVertex(10,0,0)
+    glColor3f(0,1,0)
+    glVertex(0,0,0)
+    glVertex(0,10,0)
+    glColor3f(0,0,1)
+    glVertex(0,0,0)
+    glVertex(0,0,10)
+    glEnd()
+    
+angle=0
+move=0
+right=True
+run=0
+
+
+def draw():
+    global angle
+    global move
+    global right
+    global run
+    glMatrixMode(GL_MODELVIEW)
+    
+    glClear(GL_COLOR_BUFFER_BIT)
+    
+    glLoadIdentity()
+    glColor3f(.7,.7,.8)
+
+    glBegin(GL_POLYGON)
+    
+    glVertex(5,0,-91)
+    glVertex(5,0,15)
+    glVertex(-5,0,15)
+    glVertex(-5,0,-91)
+    glEnd()
+    for i in range(32,-32,-6):
+        
+        glColor3f(1,1,1)
+        glBegin(GL_QUADS)
+        glVertex(0,0,i)
+        glVertex(1,0,i)
+        glVertex(1,0,i-4)
+        glVertex(0,0,i-4)
+        glEnd()
+    
+    
+    glColor3f(0,1,0)
+    glBegin(GL_POLYGON)
+    glVertex(-5,0,50)
+    glVertex(-20,0,50)
+    glVertex(-20,0,-200)
+    glVertex(-5,0,-200)
+    glEnd()
+    glColor3f(0,1,0)
+    glBegin(GL_POLYGON)
+    glVertex(5,0,15)
+    glVertex(5,0,-50)
+    glVertex(20,0,-50)
+    glVertex(20,0,15)
+    glEnd()
+    glColor3f(.1,.7,1)
+    glBegin(GL_POLYGON)
+    glVertex(-20,0,50)
+    glVertex(-20,0,-100)
+    glVertex(-100,0,-100)
+    glVertex(-100,0,50)
+    glEnd()
+    glLoadIdentity()
+    
+    glColor3f(0.5,1,.9)
+    glTranslate(2,0,run)
+    glutSolidSphere(1.5,15,20)
+    glColor3f(1,0,0)
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+    
+    
+
+
+    glTranslate(move,0,z)
+    glScale(1,.25,.5)
+    glutSolidCube(5)
+
+    
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+
+    glTranslate(0,5*.25 ,z)
+    glTranslate(move,0,0)
+
+
+    glScale(.5,.25,.5)
+    glutSolidCube(5)
+
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+
+    glColor3f(0,0,1)
+    
+    glTranslate(5*.5,-5*.2*.5,5*.5*.5)
+    glTranslate(move,0,z)
+
+    glRotate(angle,0,0,1)
+    glutWireTorus(.125,.5,12,10)
+
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+
+    glColor3f(0,0,1)
+    glTranslate(5*.5,-5*.2*.5,-5*.5*.5)
+    glTranslate(move,0,z)
+
+    glRotate(angle,0,0,1)
+    glutWireTorus(.125,.5,12,10)
+    
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+
+    glColor3f(0,0,1)
+    glTranslate(-5*.5,-5*.2*.5,5*.5*.5)
+    glTranslate(move,0,z)
+
+    glRotate(angle,0,0,1)
+    glutWireTorus(.125,.5,12,10)
+
+    glLoadIdentity()
+    glRotate(90,0,1,0)
+
+    glColor3f(0,0,1)
+    glTranslate(-5*.5,-5*.2*.5,-5*.5*.5)
+    glTranslate(move,0,z)
+    glRotate(angle,0,0,1)
+    glutWireTorus(.125,.5,12,10)
+    
+   
+    
+    
+    #drawXYZ()
+    
+
+    glutSwapBuffers()
+    
+    
+    if right:
+        angle-=.1
+        move+=.004
+        run+=.01
+        if move>5 and run>5:
+            right=False
+
+    else:
+        run-=.01
+        angle+=.1
+        move-=.004
+        if move<-5 and run<-5:
+            right=True
+
+z=0
+def specialKeyHandler(key,x,y):
+    global z
+    global run
+    if key ==GLUT_KEY_RIGHT:
+        z+=.1
+        
+        pass
+    
+    elif key==GLUT_KEY_LEFT:
+        z-=.1
+        pass
+    
+
+    draw()
+
+    
+
+glutInit()
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+glutInitWindowSize(600,600)
+glutCreateWindow(b"moving car")
+myInit()
+glutDisplayFunc(draw)
+glutSpecialFunc(specialKeyHandler)
+
+
+glutIdleFunc(draw)
+    
+
+glutMainLoop()
